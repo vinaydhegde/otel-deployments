@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opentelemetry-kube-stack
+  namespace: argocd
+spec:
+  project: default
+    
+  # sources:  
+  #   # Helm chart source from ACR
+  #   - repoURL: oci://myacrvinayh.azurecr.io/helm
+  #     chart: opentelemetry-kube-stack
+  #     targetRevision: 0.6.2
+  #     helm:
+  #       releaseName: opentelemetry-kube-stack
+  #   # Kustomize wrapper source
+  #   - repoURL: https://github.com/vinaydhegde/otel-deployments
+  #     targetRevision: main
+  #     path: overlays/dev
+
+  source:
+    repoURL: https://github.com/vinaydhegde/otel-deployments
+    targetRevision: main
+    path: overlays/dev
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: o11y-otel
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

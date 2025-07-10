@@ -1,0 +1,6 @@
+defaultCRConfig:
+  image:
+    repository: "docker.elastic.co/elastic-agent/elastic-agent"
+    tag: "9.2.0"
+  targetAllocator:
+    enabled: false
