@@ -1,0 +1,30 @@
+collectors:
+  cluster:
+    config:
+      processors:
+        resource:
+          attributes:
+            -  key: data_stream.namespace
+               action: upsert
+               value: sce_sre_ltng_xyz
+      receivers:
+        httpcheck:
+          collection_interval: 60s  
+          targets:
+            - endpoint: https://xyz/health
+              tls:
+                insecure_skip_verify: true
+            - endpoint: https://abc/health
+              tls:
+                insecure_skip_verify: true                
+          initial_delay: 10s      
+          timeout: 10s
+
+  daemon:
+    config:
+      processors:
+        resource:
+          attributes:
+            -  key: data_stream.namespace
+               action: upsert
+               value: sce_sre_ltng_xyz                                                          

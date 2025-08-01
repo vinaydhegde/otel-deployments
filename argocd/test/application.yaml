@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-otel
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io      
+spec:
+  project: default
+  sources:
+    - path: charts/opentelemetry-kube-stack
+      repoURL: https://github.com/vinaydhegde/opentelemetry-helm-charts
+      targetRevision: HEAD
+      helm:
+        valueFiles:
+        - values.yaml
+        - $otel-deploy/argocd/test/common-sl-elastic-opentelemetry-kube-stack-values.yaml            
+        - $otel-deploy/argocd/test/sl-elastic-opentelemetry-kube-stack-values.yaml
+    - repoURL: https://github.com/vinaydhegde/otel-deployments
+      targetRevision: HEAD
+      ref: otel-deploy      
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: default 
+  syncPolicy:
+    automated: 
+      prune: true
